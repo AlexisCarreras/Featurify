@@ -59,6 +59,25 @@ app.get("/callback", (req, res) => {
     });
 });
 
+// Get User Profile: API para obtener los datos del usuario con la sesión actual.
+app.get("/userProfile", (req, res) => {
+  const { q } = req.query;
+  spotifyApi
+    .getUser(q)
+    .then((userData) => {
+      res.send({
+        idUser: userData.body.id,
+        displayName: userData.body.display_name,
+        type: userData.body.type,
+        followers: userData.body.followers.total,
+        imageUrl: userData.body.images[1].url,
+      });
+    })
+    .catch((err) => {
+      res.send(`Error searching: ${err}`);
+    });
+});
+
 // => Search Track: API para obtener la información de una serie de tracks buscado por su nombre, por default selecionamos 10 resultados y que se busquen solo tracks.
 app.get("/search", (req, res) => {
   const { q } = req.query;
@@ -83,7 +102,7 @@ app.get("/search", (req, res) => {
             album: {
               idAlbum: searchData.body.tracks.items[0].album.id,
               nameAlbum: searchData.body.tracks.items[0].album.name,
-              imageUrl: searchData.body.tracks.items[0].album.images[0].url
+              imageUrl: searchData.body.tracks.items[0].album.images[0].url,
             },
           },
           {
@@ -101,7 +120,7 @@ app.get("/search", (req, res) => {
             album: {
               idAlbum: searchData.body.tracks.items[1].album.id,
               nameAlbum: searchData.body.tracks.items[1].album.name,
-              imageUrl: searchData.body.tracks.items[1].album.images[0].url
+              imageUrl: searchData.body.tracks.items[1].album.images[0].url,
             },
           },
           {
@@ -119,7 +138,7 @@ app.get("/search", (req, res) => {
             album: {
               idAlbum: searchData.body.tracks.items[2].album.id,
               nameAlbum: searchData.body.tracks.items[2].album.name,
-              imageUrl: searchData.body.tracks.items[2].album.images[0].url
+              imageUrl: searchData.body.tracks.items[2].album.images[0].url,
             },
           },
           {
@@ -137,7 +156,7 @@ app.get("/search", (req, res) => {
             album: {
               idAlbum: searchData.body.tracks.items[3].album.id,
               nameAlbum: searchData.body.tracks.items[3].album.name,
-              imageUrl: searchData.body.tracks.items[3].album.images[0].url
+              imageUrl: searchData.body.tracks.items[3].album.images[0].url,
             },
           },
           {
@@ -155,7 +174,7 @@ app.get("/search", (req, res) => {
             album: {
               idAlbum: searchData.body.tracks.items[4].album.id,
               nameAlbum: searchData.body.tracks.items[4].album.name,
-              imageUrl: searchData.body.tracks.items[4].album.images[0].url
+              imageUrl: searchData.body.tracks.items[4].album.images[0].url,
             },
           },
         ],
@@ -194,8 +213,75 @@ app.get("/track", (req, res) => {
           nameAlbum: trackData.body.album.name,
           totalTracks: trackData.body.album.total_tracks,
           releaseDate: trackData.body.album.release_date,
-          imageUrl: trackData.body.album.images[0].url
+          imageUrl: trackData.body.album.images[0].url,
         },
+      });
+    })
+    .catch((err) => {
+      res.send(`Error searching: ${err}`);
+    });
+});
+
+// Get Track's Audio Features: API para obtener el análisis de la pista solicitada, también para obtener su información, debemos proporcionarle el ID del Track que se buscó o que se está ingresando.
+app.get("/audioFeature", (req, res) => {
+  const { q } = req.query;
+  spotifyApi
+    .getAudioFeaturesForTrack(q)
+    .then((audioFeatureData) => {
+      res.send({
+        acousticness: audioFeatureData.body.acousticness,
+        danceability: audioFeatureData.body.danceability,
+        duration_ms: audioFeatureData.body.duration_ms,
+        energy: audioFeatureData.body.energy,
+        id: audioFeatureData.body.id,
+        instrumentalness: audioFeatureData.body.instrumentalness,
+        key: audioFeatureData.body.key,
+        liveness: audioFeatureData.body.liveness,
+        loudness: audioFeatureData.body.loudness,
+        mode: audioFeatureData.body.mode,
+        speechiness: audioFeatureData.body.speechiness,
+        tempo: audioFeatureData.body.tempo,
+        time_signature: audioFeatureData.body.time_signature,
+        type: audioFeatureData.body.type,
+        valence: audioFeatureData.body.valence,
+      });
+    })
+    .catch((err) => {
+      res.send(`Error searching: ${err}`);
+    });
+});
+
+// => Get Recommendations: API para obtener X cantidad de resultados relacionados al track buscado, en principio obtenemos solo 6 para una vista previa, luego le podemos enviar 10 o 20 tracks relacionados.
+app.get("/tracksRecomendations", (req, res) => {
+  const { limit, seed_tracks, seed_artists } = req.query;
+  spotifyApi
+    .getRecommendations({
+      limit: limit,
+      seed_tracks: seed_tracks,
+      seed_artists: seed_artists,
+    })
+    .then((trackRecomendationData) => {
+      res.send({
+        tracks: trackRecomendationData.body.tracks.map((track) => ({
+          album: {
+            idAlbum: track.album.id,
+            nameAlbum: track.album.name,
+            images: track.album.images.map((img) => ({
+              url: img.url,
+              height: img.height,
+              width: img.width,
+            })),
+          },
+          artists: track.artists.map((artist) => ({
+            idArtist: artist.id,
+            nameArtist: artist.name,
+          })),
+          idTrack: track.id,
+          nameTrack: track.name,
+          duration_ms: track.duration_ms,
+          explicit: track.explicit,
+          type: track.type,
+        })),
       });
     })
     .catch((err) => {
