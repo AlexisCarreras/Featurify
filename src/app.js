@@ -19,14 +19,6 @@ const playTrack = require("./services/PlayTrack/playTrack");
 const app = express();
 const port = process.env.PORT || 8080;
 
-// // Routes
-// const loadRoutes = require("./routes");
-// loadRoutes(app);
-
-// // Load swagger support
-// const swagger = require("./docs/swagger/autogen");
-// swagger();
-
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI)
