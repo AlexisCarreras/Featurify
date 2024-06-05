@@ -1,4 +1,44 @@
-// API donde se redigirá una vez que se se loguee, obteniendo tokens.
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Endpoints de autenticación
+ */
+
+/**
+ * @swagger
+ * /callback:
+ *   get:
+ *     summary: Redirigir al usuario a esta URL después de la autenticación de Spotify
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Código de autorización proporcionado por Spotify
+ *       - in: query
+ *         name: state
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Estado proporcionado por la solicitud inicial
+ *       - in: query
+ *         name: error
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Error proporcionado por Spotify
+ *     responses:
+ *       200:
+ *         description: Autenticación exitosa, se han obtenido los tokens
+ *       400:
+ *         description: Error en la solicitud
+ *       500:
+ *         description: Error en el servidor
+ */
+
 function getCallBack(app, spotifyApi) {
   app.get("/callback", (req, res) => {
     const error = req.query.error;

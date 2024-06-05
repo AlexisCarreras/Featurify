@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: User
- *   description: Endpoints para obtener los datos de un usuario
+ *   description: Endpoints para obtener los datos de un usuario.
  */
 
 /**

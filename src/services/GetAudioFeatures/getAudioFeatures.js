@@ -1,26 +1,94 @@
-// Get Track's Audio Features: API para obtener el análisis de un track a través de su ID.
+/**
+ * @swagger
+ * tags:
+ *   name: Tracks
+ *   description: Endpoints relacionados con los Tracks.
+ */
+
+/**
+ * @swagger
+ * /audioFeature:
+ *   get:
+ *     summary: Obtener análisis de audio de un Track
+ *     tags: [Tracks]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del track 
+ *     responses:
+ *       200:
+ *         description: Características de audio del track
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 idTrack:
+ *                   type: string
+ *                   description: ID del track
+ *                 danceability:
+ *                   type: number
+ *                   description: Capacidad de baile del track
+ *                 energy:
+ *                   type: number
+ *                   description: Energía del track
+ *                 key:
+ *                   type: integer
+ *                   description: Clave musical del track
+ *                 loudness:
+ *                   type: number
+ *                   description: Volumen del track
+ *                 mode:
+ *                   type: integer
+ *                   description: Modo del track
+ *                 speechiness:
+ *                   type: number
+ *                   description: Cantidad de palabras habladas en el track
+ *                 acousticness:
+ *                   type: number
+ *                   description: Acústica del track
+ *                 instrumentalness:
+ *                   type: number
+ *                   description: Instrumentalidad del track
+ *                 liveness:
+ *                   type: number
+ *                   description: Vivacidad del track
+ *                 valence:
+ *                   type: number
+ *                   description: Positividad del track
+ *                 tempo:
+ *                   type: number
+ *                   description: Tempo del track
+ *                 durationMs:
+ *                   type: integer
+ *                   description: Duración del track en milisegundos
+ *       500:
+ *         description: Error del servidor
+ */
+
 function getAudioFeatures(app, spotifyApi) {
   app.get("/audioFeature", (req, res) => {
     const { q } = req.query;
     spotifyApi
       .getAudioFeaturesForTrack(q)
-      .then((audioFeatureData) => {
+      .then((audioFeaturesData) => {
         res.send({
-          acousticness: audioFeatureData.body.acousticness,
-          danceability: audioFeatureData.body.danceability,
-          duration_ms: audioFeatureData.body.duration_ms,
-          energy: audioFeatureData.body.energy,
-          id: audioFeatureData.body.id,
-          instrumentalness: audioFeatureData.body.instrumentalness,
-          key: audioFeatureData.body.key,
-          liveness: audioFeatureData.body.liveness,
-          loudness: audioFeatureData.body.loudness,
-          mode: audioFeatureData.body.mode,
-          speechiness: audioFeatureData.body.speechiness,
-          tempo: audioFeatureData.body.tempo,
-          time_signature: audioFeatureData.body.time_signature,
-          type: audioFeatureData.body.type,
-          valence: audioFeatureData.body.valence,
+          idTrack: audioFeaturesData.body.id,
+          danceability: audioFeaturesData.body.danceability,
+          energy: audioFeaturesData.body.energy,
+          key: audioFeaturesData.body.key,
+          loudness: audioFeaturesData.body.loudness,
+          mode: audioFeaturesData.body.mode,
+          speechiness: audioFeaturesData.body.speechiness,
+          acousticness: audioFeaturesData.body.acousticness,
+          instrumentalness: audioFeaturesData.body.instrumentalness,
+          liveness: audioFeaturesData.body.liveness,
+          valence: audioFeaturesData.body.valence,
+          tempo: audioFeaturesData.body.tempo,
+          durationMs: audioFeaturesData.body.duration_ms,
         });
       })
       .catch((err) => {

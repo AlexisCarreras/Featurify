@@ -1,4 +1,92 @@
-// Get Track: API para obtener todos los detalles de un track, una vez que usamos la api de search, obtenemos el ID del Track solicitado, debemos guardarlo y pasárselo a este servicio a través del Front.
+/**
+ * @swagger
+ * tags:
+ *   name: Tracks
+ *   description: Endpoints relacionados con los Tracks.
+ */
+
+/**
+ * @swagger
+ * /getTrack:
+ *   get:
+ *     summary: Obtener detalle de un Track a través de su ID
+ *     tags: [Tracks]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del Track
+ *     responses:
+ *       200:
+ *         description: Lista de pistas encontradas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 limit:
+ *                   type: integer
+ *                   description: Número de resultados devueltos
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       idTrack:
+ *                         type: string
+ *                         description: ID del track
+ *                       type:
+ *                         type: string
+ *                         description: Tipo del track
+ *                       nameTrack:
+ *                         type: string
+ *                         description: Nombre del track
+ *                       durationMs:
+ *                         type: integer
+ *                         description: Duración del track en milisegundos
+ *                       explicit:
+ *                         type: boolean
+ *                         description: Si el track es explícito
+ *                       artist:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             idArtist:
+ *                               type: string
+ *                               description: ID del artista
+ *                             nameArtist:
+ *                               type: string
+ *                               description: Nombre del artista
+ *                       album:
+ *                         type: object
+ *                         properties:
+ *                           idAlbum:
+ *                             type: string
+ *                             description: ID del álbum
+ *                           nameAlbum:
+ *                             type: string
+ *                             description: Nombre del álbum
+ *                           images:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 url:
+ *                                   type: string
+ *                                   description: URL de la imagen
+ *                                 height:
+ *                                   type: integer
+ *                                   description: Altura de la imagen
+ *                                 width:
+ *                                   type: integer
+ *                                   description: Ancho de la imagen
+ *       500:
+ *         description: Error del servidor
+ */
+
 function getTrack(app, spotifyApi) {
   app.get("/getTrack", (req, res) => {
     const { q } = req.query;

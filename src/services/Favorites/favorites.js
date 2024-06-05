@@ -7,7 +7,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Favorites
- *   description: Endpoints para manejar GET, POST y DELETE de tracks guardados como favoritos
+ *   description: Endpoints para manejar tracks guardados como favoritos.
  */
 
 /**
