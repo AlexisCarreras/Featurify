@@ -51,7 +51,7 @@
  *         description: Error obteniendo la información del usuario
  */
 
-function getUserMe(router) {
+export default function getUserMe(router) {
   router.get("/userMe", (req, res) => {
     req.spotifyApi
       .getMe()
@@ -78,5 +78,3 @@ function getUserMe(router) {
       });
   });
 }
-
-module.exports = getUserMe;

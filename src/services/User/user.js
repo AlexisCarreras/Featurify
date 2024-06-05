@@ -1,7 +1,7 @@
-const express = require("express");
+import express from "express";
 
-const getUserMe = require("./GetUserMe/getUserMe");
-const getUserProfile = require("./GetUserProfile/getUserProfile");
+import getUserMe from "./GetUserMe/getUserMe.js";
+import getUserProfile from "./GetUserProfile/getUserProfile.js";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ const router = express.Router();
 getUserMe(router);
 getUserProfile(router);
 
-module.exports = router;
+export default router;

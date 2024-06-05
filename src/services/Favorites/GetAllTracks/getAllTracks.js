@@ -16,7 +16,7 @@
  *       500:
  *         description: Error del servidor
  */
-function getAllTracks(router, favoriteSchema) {
+export default function getAllTracks(router, favoriteSchema) {
   router.get("/getAllTracks", (req, res) => {
     favoriteSchema
       .find()
@@ -24,5 +24,3 @@ function getAllTracks(router, favoriteSchema) {
       .catch((error) => res.json({ message: error }));
   });
 }
-
-module.exports = getAllTracks;

@@ -1,5 +1,5 @@
 // API para reproducir la pista en la APP.
-function playTrack(app) {
+export default function playTrack(app) {
   app.get("/play", (req, res) => {
     const { uri } = req.query;
     req.spotifyApi
@@ -12,5 +12,3 @@ function playTrack(app) {
       });
   });
 }
-
-module.exports = playTrack;

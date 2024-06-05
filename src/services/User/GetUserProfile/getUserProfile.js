@@ -48,8 +48,7 @@
  *       500:
  *         description: Error del servidor
  */
-
-function getUserProfile(router) {
+export default function getUserProfile(router) {
   router.get("/userProfile/:idUsuario", (req, res) => {
     const { idUsuario } = req.params;
     req.spotifyApi
@@ -72,5 +71,3 @@ function getUserProfile(router) {
       });
   });
 }
-
-module.exports = getUserProfile;

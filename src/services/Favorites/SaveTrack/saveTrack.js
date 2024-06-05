@@ -91,7 +91,7 @@
  *       500:
  *         description: Error del servidor
  */
-function saveTrack(router, favoriteSchema) {
+export default function saveTrack(router, favoriteSchema) {
   router.post("/saveTrack", (req, res) => {
     const trackFavorite = favoriteSchema(req.body);
     trackFavorite
@@ -100,5 +100,3 @@ function saveTrack(router, favoriteSchema) {
       .catch((error) => res.json({ message: error }));
   });
 }
-
-module.exports = saveTrack;

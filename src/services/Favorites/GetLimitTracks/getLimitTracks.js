@@ -23,7 +23,7 @@
  *       500:
  *         description: Error del servidor
  */
-function getLimitTracks(router, favoriteSchema) {
+export default function getLimitTracks(router, favoriteSchema) {
   router.get("/getLimitTracks", (req, res) => {
     const limit = parseInt(req.query.limit) || 10; // Por defecto, trae 10 si no se especifica un límite
     favoriteSchema
@@ -33,5 +33,3 @@ function getLimitTracks(router, favoriteSchema) {
       .catch((error) => res.json({ message: error }));
   });
 }
-
-module.exports = getLimitTracks;

@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 
-const getSearchTracks = require("./GetSearchTracks/getSearchTracks");
-const getTrack = require("./GetTrack/getTrack");
-const getAudioFeatures = require("./GetAudioFeatures/getAudioFeatures");
-const getTracksRecomendations = require("./GetTracksRecomendations/getTracksRecomendations");
-const playTrack = require("./PlayTrack/playTrack");
+import getSearchTracks from "./GetSearchTracks/getSearchTracks.js";
+import getTrack from "./GetTrack/getTrack.js";
+import getAudioFeatures from "./GetAudioFeatures/getAudioFeatures.js";
+import getTracksRecomendations from "./GetTracksRecomendations/getTracksRecomendations.js";
+import playTrack from "./PlayTrack/playTrack.js";
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ getAudioFeatures(router);
 getTracksRecomendations(router);
 playTrack(router);
 
-module.exports = router;
+export default router;

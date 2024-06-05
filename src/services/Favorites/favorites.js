@@ -1,10 +1,10 @@
-const express = require("express");
-const favoriteSchema = require("../../models/favorite.model");
+import express from "express";
+import favoriteSchema from "../../models/favorite.model.js";
 
-const getAllTracks = require("./GetAllTracks/getAllTracks");
-const getLimitTracks = require("./GetLimitTracks/getLimitTracks");
-const saveTrack = require("./SaveTrack/saveTrack");
-const deleteTrack = require("./DeleteTrack/deleteTrack");
+import getAllTracks from "./GetAllTracks/getAllTracks.js";
+import getLimitTracks from "./GetLimitTracks/getLimitTracks.js";
+import saveTrack from "./SaveTrack/saveTrack.js";
+import deleteTrack from "./DeleteTrack/deleteTrack.js";
 
 const router = express.Router();
 
@@ -20,4 +20,4 @@ getLimitTracks(router, favoriteSchema);
 saveTrack(router, favoriteSchema);
 deleteTrack(router, favoriteSchema);
 
-module.exports = router;
+export default router;

@@ -28,7 +28,7 @@
  *       500:
  *         description: Error del servidor
  */
-function deleteTrack(router, favoriteSchema) {
+export default function deleteTrack(router, favoriteSchema) {
   router.delete("/deleteTrack/:id", (req, res) => {
     const { id } = req.params;
     favoriteSchema
@@ -37,5 +37,3 @@ function deleteTrack(router, favoriteSchema) {
       .catch((error) => res.json({ message: error }));
   });
 }
-
-module.exports = deleteTrack;

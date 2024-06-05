@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const imageSchema = mongoose.Schema({
   url: {
@@ -51,4 +51,4 @@ const favoriteSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Favorite", favoriteSchema);
+export default mongoose.model('Favorite', favoriteSchema);

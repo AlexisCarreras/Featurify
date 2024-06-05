@@ -61,8 +61,7 @@
  *       500:
  *         description: Error del servidor
  */
-
-function getAudioFeatures(app) {
+export default function getAudioFeatures(app) {
   app.get("/audioFeature", (req, res) => {
     const { q } = req.query;
     req.spotifyApi
@@ -89,5 +88,3 @@ function getAudioFeatures(app) {
       });
   });
 }
-
-module.exports = getAudioFeatures;

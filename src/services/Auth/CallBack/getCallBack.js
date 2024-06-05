@@ -31,8 +31,7 @@
  *       500:
  *         description: Error en el servidor
  */
-
-function getCallBack(app) {
+export default function getCallBack(app) {
   app.get("/callback", (req, res) => {
     const error = req.query.error;
     const code = req.query.code;
@@ -71,5 +70,3 @@ function getCallBack(app) {
       });
   });
 }
-
-module.exports = getCallBack;

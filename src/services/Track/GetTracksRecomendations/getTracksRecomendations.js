@@ -86,8 +86,7 @@
  *       500:
  *         description: Error del servidor
  */
-
-function getTracksRecomendations(app) {
+export default function getTracksRecomendations(app) {
   app.get("/tracksRecomendations", (req, res) => {
     const { limit, seed_tracks, seed_artists } = req.query;
     req.spotifyApi
@@ -125,5 +124,3 @@ function getTracksRecomendations(app) {
       });
   });
 }
-
-module.exports = getTracksRecomendations;

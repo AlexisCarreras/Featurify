@@ -8,8 +8,7 @@
  *       302:
  *         description: Redirección a la página de autenticación de Spotify. (No disponible cuando se prueba desde Swagger)
  */
-
-function login(app) {
+export default function login(app) {
   app.get("/login", (req, res) => {
     const scopes = [
       "user-read-private",
@@ -20,5 +19,3 @@ function login(app) {
     res.redirect(req.spotifyApi.createAuthorizeURL(scopes));
   });
 }
-
-module.exports = login;

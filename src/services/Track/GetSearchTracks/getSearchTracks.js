@@ -79,8 +79,7 @@
  *       500:
  *         description: Error del servidor
  */
-
-function getSearchTracks(app) {
+export default function getSearchTracks(app) {
   app.get("/searchTracks", (req, res) => {
     const { q } = req.query;
     req.spotifyApi
@@ -115,5 +114,3 @@ function getSearchTracks(app) {
       });
   });
 }
-
-module.exports = getSearchTracks;

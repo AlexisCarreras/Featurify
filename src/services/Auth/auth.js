@@ -1,7 +1,6 @@
-const express = require("express");
-
-const login = require("./Login/login");
-const getCallBack = require("./CallBack/getCallBack");
+import express from "express";
+import login from "./Login/login.js";
+import getCallBack from "./CallBack/getCallBack.js";
 
 const router = express.Router();
 
@@ -15,4 +14,4 @@ const router = express.Router();
 login(router);
 getCallBack(router);
 
-module.exports = router;
+export default router;
