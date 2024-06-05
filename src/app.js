@@ -1,5 +1,9 @@
 require("dotenv").config();
 const express = require("express");
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swaggerConfig'); // Ruta de archivo de configuración Swagger
+
 const mongoose = require("mongoose");
 
 const SpotifyWebApi = require("spotify-web-api-node");
@@ -19,6 +23,8 @@ const playTrack = require("./services/PlayTrack/playTrack");
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -33,7 +39,7 @@ const spotifyApi = new SpotifyWebApi({
 
 // Middleware Favorite
 app.use(express.json());
-app.use("/favorite", favoritesRoutes);
+app.use("/favorites", favoritesRoutes);
 
 login(app, spotifyApi);
 getCallBack(app, spotifyApi);
