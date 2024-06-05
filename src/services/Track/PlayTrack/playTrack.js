@@ -1,8 +1,8 @@
 // API para reproducir la pista en la APP.
-function playTrack(app, spotifyApi) {
+function playTrack(app) {
   app.get("/play", (req, res) => {
     const { uri } = req.query;
-    spotifyApi
+    req.spotifyApi
       .play({ uris: [uri] })
       .then(() => {
         res.send("playback started");

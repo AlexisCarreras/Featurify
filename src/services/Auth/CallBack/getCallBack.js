@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: Auth
- *   description: Endpoints de autenticación
- */
-
-/**
- * @swagger
- * /callback:
+ * /auth/callback:
  *   get:
  *     summary: Redirigir al usuario a esta URL después de la autenticación de Spotify
  *     tags: [Auth]
@@ -39,7 +32,7 @@
  *         description: Error en el servidor
  */
 
-function getCallBack(app, spotifyApi) {
+function getCallBack(app) {
   app.get("/callback", (req, res) => {
     const error = req.query.error;
     const code = req.query.code;
@@ -51,15 +44,15 @@ function getCallBack(app, spotifyApi) {
       return;
     }
 
-    spotifyApi
+    req.spotifyApi
       .authorizationCodeGrant(code)
       .then((data) => {
         const access_token = data.body["access_token"];
         const refresh_token = data.body["refresh_token"];
         const expires_in = data.body["expires_in"];
 
-        spotifyApi.setAccessToken(access_token);
-        spotifyApi.setRefreshToken(refresh_token);
+        req.spotifyApi.setAccessToken(access_token);
+        req.spotifyApi.setRefreshToken(refresh_token);
 
         console.log(`The access token expires in ${expires_in} seconds`);
         console.log(`The access token is ${access_token}`);
@@ -67,9 +60,9 @@ function getCallBack(app, spotifyApi) {
         res.send("Success!");
 
         setInterval(async () => {
-          const data = await spotifyApi.refreshAccessToken();
+          const data = await req.spotifyApi.refreshAccessToken();
           const access_token_refreshed = data.body["access_token"];
-          spotifyApi.setAccessToken(access_token_refreshed);
+          req.spotifyApi.setAccessToken(access_token_refreshed);
         }, (expires_in / 2) * 1000);
       })
       .catch((err) => {

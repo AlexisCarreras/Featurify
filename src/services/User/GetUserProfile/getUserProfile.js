@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: User
- *   description: Endpoints para obtener datos de usuario.
- */
-
-/**
- * @swagger
- * /userProfile/{idUsuario}:
+ * /user/userProfile/{idUsuario}:
  *   get:
  *     summary: Obtener los datos de un usuario a través de su ID
  *     tags: [User]
@@ -56,10 +49,10 @@
  *         description: Error del servidor
  */
 
-function getUserProfile(app, spotifyApi) {
-  app.get("/userProfile/:idUsuario", (req, res) => {
+function getUserProfile(router) {
+  router.get("/userProfile/:idUsuario", (req, res) => {
     const { idUsuario } = req.params;
-    spotifyApi
+    req.spotifyApi
       .getUser(idUsuario)
       .then((userData) => {
         res.send({

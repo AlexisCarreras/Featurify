@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: Auth
- *   description: Endpoints de autenticación
- */
-
-/**
- * @swagger
- * /login:
+ * /auth/login:
  *   get:
  *     summary: Redirigir al usuario para iniciar sesión en Spotify
  *     tags: [Auth]
@@ -16,7 +9,7 @@
  *         description: Redirección a la página de autenticación de Spotify. (No disponible cuando se prueba desde Swagger)
  */
 
-function login(app, spotifyApi) {
+function login(app) {
   app.get("/login", (req, res) => {
     const scopes = [
       "user-read-private",
@@ -24,7 +17,7 @@ function login(app, spotifyApi) {
       "user-read-playback-state",
       "user-modify-playback-state",
     ];
-    res.redirect(spotifyApi.createAuthorizeURL(scopes));
+    res.redirect(req.spotifyApi.createAuthorizeURL(scopes));
   });
 }
 

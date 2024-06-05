@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: User
- *   description: Endpoints para obtener datos de usuario.
- */
-
-/**
- * @swagger
- * /userMe:
+ * /user/userMe:
  *   get:
  *     summary: Obtener información del usuario logueado
  *     tags: [User]
@@ -58,9 +51,9 @@
  *         description: Error obteniendo la información del usuario
  */
 
-function getUserMe(app, spotifyApi) {
-  app.get("/userMe", (req, res) => {
-    spotifyApi
+function getUserMe(router) {
+  router.get("/userMe", (req, res) => {
+    req.spotifyApi
       .getMe()
       .then((UserMeData) => {
         res.send({

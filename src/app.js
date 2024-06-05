@@ -8,24 +8,13 @@ const mongoose = require("mongoose");
 
 const SpotifyWebApi = require("spotify-web-api-node");
 
-const login = require("./services/Login/login");
-const getCallBack = require("./services/CallBack/getCallBack");
-
 const favoritesRoutes = require("./services/Favorites/favorites");
-
-const getUserMe = require("./services/GetUserMe/getUserMe");
-const getUserProfile = require("./services/GetUserProfile/getUserProfile");
-
-const getSearchTracks = require("./services/GetSearchTracks/getSearchTracks");
-const getTrack = require("./services/GetTrack/getTrack");
-const getAudioFeatures = require("./services/GetAudioFeatures/getAudioFeatures");
-const getTracksRecomendations = require("./services/GetTracksRecomendations/getTracksRecomendations");
-const playTrack = require("./services/PlayTrack/playTrack");
+const UserRoutes = require("./services/User/user");
+const TrackRoutes = require("./services/Track/track");
+const AuthRoutes = require("./services/Auth/auth");
 
 const app = express();
 const port = process.env.PORT || 8080;
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // MongoDB Connection
 mongoose
@@ -33,27 +22,33 @@ mongoose
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((error) => console.log(error));
 
+// Swagger Connection
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Configurar la instancia de SpotifyWebApi
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   redirectUri: process.env.REDIRECT_URI,
 });
 
-// Middleware Favorite
+// Middleware para adjuntar spotifyApi al objeto req
+const attachSpotifyApi = (req, res, next) => {
+  req.spotifyApi = spotifyApi;
+  next();
+};
+
+// Adjuntar spotifyApi antes de las rutas que lo necesiten
+app.use(attachSpotifyApi);
+
+// Middleware para respuestas: Favorite
 app.use(express.json());
+
+// Rutas
+app.use("/auth", AuthRoutes);
+app.use("/user", UserRoutes);
+app.use("/track", TrackRoutes);
 app.use("/favorites", favoritesRoutes);
-
-login(app, spotifyApi);
-getCallBack(app, spotifyApi);
-
-getUserMe(app, spotifyApi);
-getUserProfile(app, spotifyApi);
-
-getSearchTracks(app, spotifyApi);
-getTrack(app, spotifyApi);
-getAudioFeatures(app, spotifyApi);
-getTracksRecomendations(app, spotifyApi);
-playTrack(app, spotifyApi);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

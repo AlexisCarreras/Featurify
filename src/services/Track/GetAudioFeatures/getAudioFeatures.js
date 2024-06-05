@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: Tracks
- *   description: Endpoints relacionados con los Tracks.
- */
-
-/**
- * @swagger
- * /audioFeature:
+ * /track/audioFeature:
  *   get:
  *     summary: Obtener análisis de audio de un Track
  *     tags: [Tracks]
@@ -69,10 +62,10 @@
  *         description: Error del servidor
  */
 
-function getAudioFeatures(app, spotifyApi) {
+function getAudioFeatures(app) {
   app.get("/audioFeature", (req, res) => {
     const { q } = req.query;
-    spotifyApi
+    req.spotifyApi
       .getAudioFeaturesForTrack(q)
       .then((audioFeaturesData) => {
         res.send({

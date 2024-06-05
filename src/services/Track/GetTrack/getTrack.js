@@ -1,15 +1,8 @@
 /**
  * @swagger
- * tags:
- *   name: Tracks
- *   description: Endpoints relacionados con los Tracks.
- */
-
-/**
- * @swagger
- * /searchTracks:
+ * /track/getTrack:
  *   get:
- *     summary: Buscar Tracks por nombre
+ *     summary: Obtener detalle de un Track a través de su ID
  *     tags: [Tracks]
  *     parameters:
  *       - in: query
@@ -17,10 +10,10 @@
  *         schema:
  *           type: string
  *         required: true
- *         description: Nombre de la pista a buscar
+ *         description: ID del Track
  *     responses:
  *       200:
- *         description: Resultados de la búsqueda de pistas
+ *         description: Lista de pistas encontradas
  *         content:
  *           application/json:
  *             schema:
@@ -28,7 +21,7 @@
  *               properties:
  *                 limit:
  *                   type: integer
- *                   description: Límite de resultados
+ *                   description: Número de resultados devueltos
  *                 items:
  *                   type: array
  *                   items:
@@ -39,7 +32,7 @@
  *                         description: ID del track
  *                       type:
  *                         type: string
- *                         description: Tipo de track
+ *                         description: Tipo del track
  *                       nameTrack:
  *                         type: string
  *                         description: Nombre del track
@@ -76,7 +69,7 @@
  *                               properties:
  *                                 url:
  *                                   type: string
- *                                   description: URL de la imagen del álbum
+ *                                   description: URL de la imagen
  *                                 height:
  *                                   type: integer
  *                                   description: Altura de la imagen
@@ -87,34 +80,38 @@
  *         description: Error del servidor
  */
 
-function getSearchTracks(app, spotifyApi) {
-  app.get("/searchTracks", (req, res) => {
+function getTrack(app) {
+  app.get("/getTrack", (req, res) => {
     const { q } = req.query;
-    spotifyApi
-      .searchTracks(q, { limit: 5 })
-      .then((searchData) => {
+    req.spotifyApi
+      .getTrack(q)
+      .then((trackData) => {
         res.send({
-          limit: searchData.body.tracks.limit,
-          items: searchData.body.tracks.items.map((item) => ({
-            idTrack: item.id,
-            type: item.type,
-            nameTrack: item.name,
-            durationMs: item.duration_ms,
-            explicit: item.explicit,
-            artist: item.artists.map((artist) => ({
-              idArtist: artist.id,
-              nameArtist: artist.name,
-            })),
-            album: {
-              idAlbum: item.album.id,
-              nameAlbum: item.album.name,
-              images: item.album.images.map((img) => ({
-                url: img.url,
-                height: img.height,
-                width: img.width,
-              })),
-            },
+          idTrack: trackData.body.id,
+          type: trackData.body.type,
+          nameTrack: trackData.body.name,
+          previewTrackUrl: trackData.body.preview_url,
+          durationMs: trackData.body.duration_ms,
+          trackNumber: trackData.body.track_number,
+          explicit: trackData.body.explicit,
+          artists: trackData.body.artists.map((artist) => ({
+            idArtist: artist.id,
+            nameArtist: artist.name,
+            type: artist.type,
           })),
+          album: {
+            idAlbum: trackData.body.album.id,
+            type: trackData.body.album.type,
+            typeAlbum: trackData.body.album.album_type,
+            nameAlbum: trackData.body.album.name,
+            totalTracks: trackData.body.album.total_tracks,
+            releaseDate: trackData.body.album.release_date,
+            images: trackData.body.album.images.map((img) => ({
+              url: img.url,
+              height: img.height,
+              width: img.width,
+            })),
+          },
         });
       })
       .catch((err) => {
@@ -123,4 +120,4 @@ function getSearchTracks(app, spotifyApi) {
   });
 }
 
-module.exports = getSearchTracks;
+module.exports = getTrack;

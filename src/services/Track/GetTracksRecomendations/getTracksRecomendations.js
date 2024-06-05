@@ -1,13 +1,6 @@
 /**
  * @swagger
- * tags:
- *   name: Tracks
- *   description: Endpoints relacionados con los Tracks.
- */
-
-/**
- * @swagger
- * /tracksRecomendations:
+ * /track/tracksRecomendations:
  *   get:
  *     summary: Obtener recomendaciones de Tracks, a través de un Track y un Artista
  *     tags: [Tracks]
@@ -94,10 +87,10 @@
  *         description: Error del servidor
  */
 
-function getTracksRecomendations(app, spotifyApi) {
+function getTracksRecomendations(app) {
   app.get("/tracksRecomendations", (req, res) => {
     const { limit, seed_tracks, seed_artists } = req.query;
-    spotifyApi
+    req.spotifyApi
       .getRecommendations({
         limit: limit,
         seed_tracks: seed_tracks,
