@@ -2,14 +2,14 @@
  * @swagger
  * tags:
  *   name: User
- *   description: Endpoints para obtener los datos de un usuario.
+ *   description: Endpoints para obtener datos de usuario.
  */
 
 /**
  * @swagger
  * /userProfile/{idUsuario}:
  *   get:
- *     summary: Obtener los datos del usuario por su ID
+ *     summary: Obtener los datos de un usuario a través de su ID
  *     tags: [User]
  *     parameters:
  *       - in: path

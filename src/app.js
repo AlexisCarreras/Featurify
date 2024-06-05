@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swaggerConfig'); // Ruta de archivo de configuración Swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swaggerConfig"); // Ruta de archivo de configuración Swagger
 
 const mongoose = require("mongoose");
 
@@ -13,7 +13,9 @@ const getCallBack = require("./services/CallBack/getCallBack");
 
 const favoritesRoutes = require("./services/Favorites/favorites");
 
+const getUserMe = require("./services/GetUserMe/getUserMe");
 const getUserProfile = require("./services/GetUserProfile/getUserProfile");
+
 const getSearchTracks = require("./services/GetSearchTracks/getSearchTracks");
 const getTrack = require("./services/GetTrack/getTrack");
 const getAudioFeatures = require("./services/GetAudioFeatures/getAudioFeatures");
@@ -23,7 +25,7 @@ const playTrack = require("./services/PlayTrack/playTrack");
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // MongoDB Connection
 mongoose
@@ -44,7 +46,9 @@ app.use("/favorites", favoritesRoutes);
 login(app, spotifyApi);
 getCallBack(app, spotifyApi);
 
+getUserMe(app, spotifyApi);
 getUserProfile(app, spotifyApi);
+
 getSearchTracks(app, spotifyApi);
 getTrack(app, spotifyApi);
 getAudioFeatures(app, spotifyApi);
