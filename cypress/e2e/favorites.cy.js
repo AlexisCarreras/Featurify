@@ -1,40 +1,41 @@
 describe("API Tests", () => {
-  const baseUrl = "http://localhost:8080/favorite"; // Ajusta la URL según tu configuración
+  const baseUrl = "http://localhost:8080/favorites";
 
   it("Recuperar todos los Tracks Favoritos", () => {
     cy.request(`${baseUrl}/getAllTracks`).its("status").should("equal", 200);
   });
 
-  // it("Recuperar Tracks de Favoritos con un límite", () => {
-  //   const limit = 1;
-  //   cy.request(`${baseUrl}/getTracks?limit=${limit}`)
-  //     .its("status")
-  //     .should("equal", 200)
-  //     .and("its", "body")
-  //     .should("have.length.lte", limit);
-  // });
-  
+  it("Recuperar Tracks de Favoritos con un límite", () => {
+    const limit = 1;
+    cy.request(`${baseUrl}/getLimitTracks?limit=${limit}`).should(
+      (response) => {
+        expect(response.status).to.equal(200);
+        expect(response.body).to.have.length.lte(limit);
+      }
+    );
+  });
+
   it("Crear nuevo Track en Favoritos", () => {
     const newTrack = {
       album: {
-        idAlbum: "123",
-        nameAlbum: "Test Album",
+        idAlbum: "2yuTRGIackbcReLUXOYBqU",
+        nameAlbum: "Jazz (2011 Remaster)",
         images: [
           {
-            url: "http://example.com/image.jpg",
-            height: 10,
-            width: 10,
+            url: "https://i.scdn.co/image/ab67616d0000b2737c39dd133836c2c1c87e34d6",
+            height: 640,
+            width: 640,
           },
         ],
       },
       artist: [
         {
-          idArtist: "456",
-          nameArtist: "Test Artist",
+          idArtist: "1dfeR4HaWDbWqFHLkxsg1d",
+          nameArtist: "Queen",
         },
       ],
-      idTrack: "789",
-      nameTrack: "Test Track",
+      idTrack: "5CTAcf8aS0a0sIsDwQRF9C",
+      nameTrack: "Bicycle Race - Remastered 2011",
     };
 
     cy.request("POST", `${baseUrl}/saveTrack`, newTrack)
@@ -43,7 +44,7 @@ describe("API Tests", () => {
   });
 
   it("Eliminar un Track de Favoritos", () => {
-    const trackId = "ID_DEL_TRACK_A_ELIMINAR"; // Cambia esto al ID del track que deseas eliminar
+    const trackId = "ID";
 
     cy.request("DELETE", `${baseUrl}/deleteTrack/${trackId}`)
       .its("status")
