@@ -87,6 +87,7 @@ export default function getTrack(app) {
       .then((trackData) => {
         res.send({
           idTrack: trackData.body.id,
+          uriTrack: trackData.body.uri,
           type: trackData.body.type,
           nameTrack: trackData.body.name,
           previewTrackUrl: trackData.body.preview_url,
