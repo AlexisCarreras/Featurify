@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swaggerConfig.js"; // Ruta de archivo de configuración Swagger
@@ -38,6 +39,14 @@ const attachSpotifyApi = (req, res, next) => {
   req.spotifyApi = spotifyApi;
   next();
 };
+
+// Configuración de CORS
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // Adjuntar spotifyApi antes de las rutas que lo necesiten
 app.use(attachSpotifyApi);
