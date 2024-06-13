@@ -43,7 +43,7 @@ const attachSpotifyApi = (req, res, next) => {
 // Configuración de CORS
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3001",
     credentials: true,
   })
 );

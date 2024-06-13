@@ -10,7 +10,7 @@
  *         schema:
  *           type: string
  *         required: true
- *         description: ID del track 
+ *         description: ID del track
  *     responses:
  *       200:
  *         description: Características de audio del track
@@ -58,9 +58,13 @@
  *                 durationMs:
  *                   type: integer
  *                   description: Duración del track en milisegundos
+ *                 timeSignature:
+ *                   type: integer
+ *                   description: Compás del track
  *       500:
  *         description: Error del servidor
  */
+
 export default function getAudioFeatures(app) {
   app.get("/audioFeature", (req, res) => {
     const { q } = req.query;
@@ -81,6 +85,7 @@ export default function getAudioFeatures(app) {
           valence: audioFeaturesData.body.valence,
           tempo: audioFeaturesData.body.tempo,
           durationMs: audioFeaturesData.body.duration_ms,
+          timeSignature: audioFeaturesData.body.time_signature,
         });
       })
       .catch((err) => {
