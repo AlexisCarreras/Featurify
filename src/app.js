@@ -18,6 +18,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 
+const allowedOrigins = process.env.ORIGINS.split(",");
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -41,18 +43,26 @@ const attachSpotifyApi = (req, res, next) => {
 };
 
 // Configuración de CORS
-app.use(
-  cors({
-    origin: process.env.ORIGINS,
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Adjuntar spotifyApi antes de las rutas que lo necesiten
 app.use(attachSpotifyApi);
 
 // Middleware para respuestas: Favorite
-app.use(express.json());
+app.use(express.json()); 
 
 // Rutas
 app.use("/auth", AuthRoutes);
