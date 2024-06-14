@@ -31,6 +31,14 @@
  *       500:
  *         description: Error en el servidor
  */
+import dotenv from "dotenv";
+dotenv.config();
+
+const FRONTEND_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.FRONTEND_URL_PRODUCTION
+    : process.env.FRONTEND_URL_LOCAL;
+
 export default function getCallBack(app) {
   app.get("/callback", (req, res) => {
     const { error, code, state } = req.query;
@@ -56,7 +64,9 @@ export default function getCallBack(app) {
         console.log(`The refresh token is ${refresh_token}`);
 
         // Redirigir al frontend con los tokens en la URL
-        res.redirect(`http://localhost:3001/search?access_token=${access_token}&refresh_token=${refresh_token}&expires_in=${expires_in}`);
+        res.redirect(
+          `${FRONTEND_URL}/search?access_token=${access_token}&refresh_token=${refresh_token}&expires_in=${expires_in}`
+        );
 
         // Configurar la renovación del token de acceso
         setInterval(async () => {
