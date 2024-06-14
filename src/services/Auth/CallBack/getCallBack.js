@@ -24,8 +24,8 @@
  *         required: false
  *         description: Error proporcionado por Spotify
  *     responses:
- *       200:
- *         description: Autenticación exitosa, se han obtenido los tokens
+ *       302:
+ *         description: Redirección al frontend con los tokens en la URL
  *       400:
  *         description: Error en la solicitud
  *       500:
@@ -33,13 +33,11 @@
  */
 export default function getCallBack(app) {
   app.get("/callback", (req, res) => {
-    const error = req.query.error;
-    const code = req.query.code;
-    const state = req.query.state;
+    const { error, code, state } = req.query;
 
     if (error) {
       console.error(`Error: ${error}`);
-      res.send(`Error: ${error}`);
+      res.status(400).send(`Error: ${error}`);
       return;
     }
 
@@ -56,17 +54,25 @@ export default function getCallBack(app) {
         console.log(`The access token expires in ${expires_in} seconds`);
         console.log(`The access token is ${access_token}`);
         console.log(`The refresh token is ${refresh_token}`);
-        res.send("Success!");
 
+        // Redirigir al frontend con los tokens en la URL
+        res.redirect(`http://localhost:3001/search?access_token=${access_token}&refresh_token=${refresh_token}&expires_in=${expires_in}`);
+
+        // Configurar la renovación del token de acceso
         setInterval(async () => {
-          const data = await req.spotifyApi.refreshAccessToken();
-          const access_token_refreshed = data.body["access_token"];
-          req.spotifyApi.setAccessToken(access_token_refreshed);
+          try {
+            const data = await req.spotifyApi.refreshAccessToken();
+            const access_token_refreshed = data.body["access_token"];
+            req.spotifyApi.setAccessToken(access_token_refreshed);
+            console.log("Access token refreshed:", access_token_refreshed);
+          } catch (err) {
+            console.error("Error refreshing access token:", err);
+          }
         }, (expires_in / 2) * 1000);
       })
       .catch((err) => {
-        console.error(`Error: ${err}`);
-        res.send(`Error getting token`);
+        console.error(`Error getting token: ${err}`);
+        res.status(500).send("Error getting token");
       });
   });
 }
