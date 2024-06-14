@@ -89,9 +89,19 @@
 export default function getTracksRecomendations(app) {
   app.get("/tracksRecomendations", (req, res) => {
     const { limit, seed_tracks, seed_artists } = req.query;
+
+    if (!limit || !seed_tracks || !seed_artists) {
+      res
+        .status(400)
+        .send(
+          "Missing required query parameters: limit, seed_tracks, seed_artists"
+        );
+      return;
+    }
+
     req.spotifyApi
       .getRecommendations({
-        limit: limit,
+        limit: parseInt(limit, 10), // Ensure limit is an integer
         seed_tracks: seed_tracks,
         seed_artists: seed_artists,
       })
@@ -120,7 +130,18 @@ export default function getTracksRecomendations(app) {
         });
       })
       .catch((err) => {
-        res.send(`Error searching: ${err}`);
+        console.error("Error fetching recommendations from Spotify API:", err);
+        if (err.statusCode === 429) {
+          res.status(429).send({
+            message:
+              "Hubo más solicitudes que las permitidas por Spotify. Por favor, intentelo más tarde",
+            retryAfter: err.headers["retry-after"],
+          });
+        } else {
+          res
+            .status(500)
+            .send(`Error fetching recommendations: ${JSON.stringify(err)}`);
+        }
       });
   });
 }
